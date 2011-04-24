@@ -50,7 +50,7 @@ open OUT, "| groff | lpr -o ManualFeed=True";
 # Change to PDF before sending to printer.
 # open OUT, "| groff | ps2pdf - - | lpr -o ManualFeed=True";
 # Preview output instead of printing directly.
-# open OUT, "| groff | ps2pdf - - | open -a /Applications/Preview.app";
+# open OUT, "| groff | ps2pdf - - | open -f -a /Applications/Preview.app";
 # Print raw troff code for debugging.
 # open OUT, "> labels.rf";
 select OUT;
