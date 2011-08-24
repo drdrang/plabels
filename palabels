@@ -1,0 +1,113 @@
+#!/usr/bin/perl
+
+use Getopt::Std;
+
+$img = "$ENV{'HOME'}/graphics/logoaddr.eps";
+
+# Usage/help message.
+$usage = <<USAGE;
+Usage: palabels [options] [filename]
+Print address labels on Avery 5164 sheets
+
+  -r m : start at row m (range: 1..3; default: 1)
+  -c n : start at column n (range 1..2; default: 1)
+  -h   : print this message
+
+If no filename is given, use STDIN. An address entry is a plain text
+series of non-blank lines. Blank lines separate entries.
+USAGE
+
+# Set up geometry constants for Avery 5164 labels.
+$topmargin = 0.75;
+$poleft    = 0.375;
+$poright   = 4.55;
+$lheight   = 3.333;
+
+
+# Get starting point from command line if present.
+getopts('hr:c:', \%opt);
+die $usage if ($opt{h});
+
+$row = int($opt{r}) || 1;    # chop off any fractional parts and
+$col = int($opt{c}) || 1;
+
+# Bail out if position options are out of bounds
+die $usage unless (($row >= 1 and $row <= 3) and 
+                   ($col >= 1 and $col <= 2));
+
+# Set initial horizontal and vertical positions.
+if ($col == 1) {
+    $po = $poleft;
+} else {
+    $po = $poright;
+}
+$sp = ($topmargin + ($row - 1)*$lheight);
+
+# Pipe output through groff to printer (manual feed).
+open OUT, "| groff -P-m | lpr";
+# open OUT, "> labels.rf";      # for debugging
+select OUT;
+
+# Set up document.
+print <<"SETUP";
+.ll 3.5i
+.ft H
+.ps 14
+.vs 16
+.nf
+
+SETUP
+
+# The troff code for formatting a single entry, with placeholders for
+# positioning on the page. The magic numbers embedded in the formatting
+# commands make the layout look nice.
+$label = <<ENTRY;
+.sp |%fi
+.po %fi      
+.vs 0
+.in 0i
+.ti 0.1i
+.PSPIC -L "%s" 2.5i
+.sp .125i
+.ps 24
+\\l'3.5i'
+.ps
+.vs
+.in .125i
+.sp .375i
+%s
+ENTRY
+
+# Slurp all the input into an array of entries.
+$/ = "";
+@entries = <>;
+
+$bp = 0;                  # we don't want to start with a page break
+
+foreach (@entries) {
+  # Break page if we ran off the end.
+  if ($bp) {
+    print "\n.bp\n";      # issue the page break command
+    $bp = 0;              # reset flag
+  }
+ 
+  # Print the label.
+  s/\s+$//;               # eliminate trailing whitespace
+  printf $label, $sp, $po, $img, $_;
+  
+  # Now we set up for the next entry.
+  if ($col == 1){       # last entry was in the left column
+    $col = 2;             # so the next will be in
+    $po = $poright;       # the right column
+  } else {              # last was in the right column
+    $col = 1;             # so the next will be in
+    $po = $poleft;        # the left column
+    $row++;               # of the next row
+    if ($row > 3) {       # we're at the end of the page
+      $bp = 1;              # page break flag
+      $row = 1;             # new page starts at top row
+    }
+    $sp = ($topmargin + ($row - 1)*$lheight);
+ }
+}
+
