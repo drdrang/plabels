@@ -64,7 +64,7 @@ Ploddington, NH 00012
 
 Blank lines separate the addresses. When run through `palabels`, the result looks like this:
 
-<img class="ss" src="http://farm7.static.flickr.com/6206/6081130360_43603a3098_z.jpg" title="Sample of palabels" alt="Sample of palabels" />
+<img class="ss" src=";http://farm7.static.flickr.com/6206/6081130360_43603a3098.jpg" title="Sample of palabels" alt="Sample of palabels" />
 
 The return address is an EPS file named `logoaddr.eps` kept in the `~/graphics` directory. The graphic will be scaled to fit in a box 2½″ long by ½″ high. You can change the name and location of the EPS file by editing this line near the top of `palabels`:
 
