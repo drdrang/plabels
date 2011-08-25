@@ -124,7 +124,7 @@ for `ptlabels`, and
     $poright   = 4.55;
     $lheight   = 3.333;
 
-for `palabels'. These dimensions (in inches) work for my printer, but your printer's manual paper feed may work a little differently. If you find the printing isn't aligned with the labels, you can adjust these values to get the positioning right.
+for `palabels`. These dimensions (in inches) work for my printer, but your printer's manual paper feed may work a little differently. If you find the printing isn't aligned with the labels, you can adjust these values to get the positioning right.
 
 [1]: http://pages.cs.wisc.edu/~ghost/
 [2]: http://www.tug.org/mactex/
