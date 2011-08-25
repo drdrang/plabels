@@ -4,6 +4,8 @@ The `pflabels` ("print folder labels") script prints to Avery 5161 labels. These
 
 The `ptlabels` script ("print tiny labels") prints to Avery 5167 labels. These are ½″×1¾″ labels that come 80 to a sheet—20 rows by 4 columns. They're usually called Return Address Labels, but I use them for all kinds of small things.
 
+The `palabels` script ("print address labels") prints to Avery 5164 labels. These are 3⅓″×4″ labels that come 6 to a sheet—3 rows by 2 columns. I use them for address labels on boxes and large envelopes. 
+
 Using these scripts provides several advantages over using the template files that Avery provides:
 
 1. They don't require Microsoft Word.
@@ -11,7 +13,9 @@ Using these scripts provides several advantages over using the template files th
 3. They can accept input piped from another script, which makes it easy to create sequentially numbered labels.
 4. They're smart enough to start a new sheet when needed. The user doesn't have to think about the layout.
 
-# Input rules#
+# Input rules #
+
+## pflabels and ptlabels ##
 
 The input consists of plain text, formatted like this:
 
@@ -44,6 +48,33 @@ The labels don't have to start in the upper left corner of the sheet. Both `pfla
 
 If the input specifies more labels than can fit on a single sheet, the scripts will continue at the top left corner of a new sheet.
 
+## palabels ##
+
+The input consists of plain text, formatted like this:
+
+John Smith
+ABC Company
+123 Main Street
+Anytown, NY 10000
+
+Jane Eyre
+Mack, Book & Eyre LLP
+1212 First Avenue
+Ploddington, NH 00012
+
+Blank lines separate the addresses. When run through `palabels`, the result looks like this:
+
+<img class="ss" src="http://farm7.static.flickr.com/6206/6081130360_43603a3098_z.jpg" title="Sample of palabels" alt="Sample of palabels" />
+
+The return address is an EPS file named `logoaddr.eps` kept in the `~/graphics` directory. The graphic will be scaled to fit in a box 2½″ long by ½″ high. You can change the name and location of the EPS file by editing this line near the top of `palabels`:
+
+    $img = "$ENV{'HOME'}/graphics/logoaddr.eps";
+
+The labels don't have to start in the upper left corner of the sheet. Both `pflabels` and `ptlabels` take two options: `-r m` and `-c n`, where *m* and *n* give the row and column numbers of the first label to be printed. This allows you to print part of a sheet with one command, and then pick up where you left off the next time.
+
+If the input specifies more labels than can fit on a single sheet, the scripts will continue at the top left corner of a new sheet.
+
+
 # Customizing #
 
 In each script is a section that looks like this:
@@ -75,7 +106,7 @@ Each script also has a section that defines certain geometric constants. These a
     $poright = 4.625;
     $lheight = 1;
 
-for `pflabels` and
+for `pflabels`,
 
     # Set up geometry constants for Avery 5167.
     $topmargin = 0.55;
@@ -85,7 +116,15 @@ for `pflabels` and
     $pocol[4]  = 6.60;
     $lheight   = 0.50;
 
-for `ptlabels`. These dimensions (in inches) work for my printer, but your printer's manual paper feed may work a little differently. If you find the printing isn't aligned with the labels, you can adjust these values to get the positioning right.
+for `ptlabels`, and
+
+    # Set up geometry constants for Avery 5164 labels.
+    $topmargin = 0.75;
+    $poleft    = 0.375;
+    $poright   = 4.55;
+    $lheight   = 3.333;
+
+for `palabels'. These dimensions (in inches) work for my printer, but your printer's manual paper feed may work a little differently. If you find the printing isn't aligned with the labels, you can adjust these values to get the positioning right.
 
 [1]: http://pages.cs.wisc.edu/~ghost/
 [2]: http://www.tug.org/mactex/

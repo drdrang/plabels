@@ -43,10 +43,21 @@ if ($col == 1) {
 }
 $sp = ($topmargin + ($row - 1)*$lheight);
 
+# # Pipe output through groff to printer (manual feed).
+# open OUT, "| groff -P-m | lpr";
+# # open OUT, "> labels.rf";      # for debugging
+# select OUT;
+
 # Pipe output through groff to printer (manual feed).
-open OUT, "| groff -P-m | lpr";
-# open OUT, "> labels.rf";      # for debugging
+open OUT, "| groff | lpr -o ManualFeed=True";
+# Change to PDF before sending to printer.
+# open OUT, "| groff | ps2pdf - - | lpr -o ManualFeed=True";
+# Preview output instead of printing directly.
+# open OUT, "| groff | ps2pdf - - | open -f -a /Applications/Preview.app";
+# Print raw troff code for debugging.
+# open OUT, "> labels.rf";
 select OUT;
+
 
 # Set up document.
 print <<"SETUP";
@@ -67,7 +78,7 @@ $label = <<ENTRY;
 .vs 0
 .in 0i
 .ti 0.1i
-.PSPIC -L "%s" 2.5i
+.PSPIC -L "%s" 2.5i 0.5i
 .sp .125i
 .ps 24
 \\l'3.5i'
