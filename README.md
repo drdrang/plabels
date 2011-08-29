@@ -52,15 +52,15 @@ If the input specifies more labels than can fit on a single sheet, the scripts w
 
 The input consists of plain text, formatted like this:
 
-John Smith
-ABC Company
-123 Main Street
-Anytown, NY 10000
+    John Smith
+    ABC Company
+    123 Main Street
+    Anytown, NY 10000
 
-Jane Eyre
-Mack, Book & Eyre LLP
-1212 First Avenue
-Ploddington, NH 00012
+    Jane Eyre
+    Mack, Book & Eyre LLP
+    1212 First Avenue
+    Ploddington, NH 00012
 
 Blank lines separate the addresses. When run through `palabels`, the result looks like this:
 
