@@ -78,7 +78,7 @@ $label = <<ENTRY;
 .vs 0
 .in 0i
 .ti 0.1i
-.PSPIC -L "%s" 2.5i 0.5i
+.PSPIC -L "%s" 3i 0.5i
 .sp .125i
 .ps 24
 \\l'3.5i'
